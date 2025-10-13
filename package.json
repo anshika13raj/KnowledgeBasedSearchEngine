@@ -1,0 +1,31 @@
+{
+  "name": "ragchat-fullstack",
+  "version": "1.0.0",
+  "description": "A full-stack RAG chat application with React frontend and Node.js backend",
+  "type": "module",
+  "scripts": {
+    "install-all": "npm run install-frontend && npm run install-backend",
+    "install-frontend": "cd frontend && npm install",
+    "install-backend": "cd backend && npm install",
+    "dev": "concurrently \"npm run dev-backend\" \"npm run dev-frontend\"",
+    "dev-frontend": "cd frontend && npm run dev",
+    "dev-backend": "cd backend && node server.js",
+    "build": "npm run build-frontend",
+    "build-frontend": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "start-production": "NODE_ENV=production npm run start",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "deploy:vercel": "cd frontend && vercel --prod",
+    "deploy:railway": "cd backend && railway up",
+    "deploy:render": "echo 'Connect your GitHub repo to Render dashboard for deployment'"
+  },
+  "keywords": ["rag", "pdf", "chat", "ai", "react", "nodejs"],
+  "author": "Shivam Mourya",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
