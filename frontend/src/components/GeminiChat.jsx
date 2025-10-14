@@ -339,6 +339,141 @@
 
 
 
+// import React, { useState, useRef, useEffect } from 'react';
+// import { uploadPDF, askQuestion } from '../api';
+
+// const GeminiChat = ({ backendStatus }) => {
+//   const [messages, setMessages] = useState([]);
+//   const [inputMessage, setInputMessage] = useState('');
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [isIndexing, setIsIndexing] = useState(false);
+//   const [hasUploadedFile, setHasUploadedFile] = useState(false);
+//   const [currentPDF, setCurrentPDF] = useState(null);
+//   const [sessionId, setSessionId] = useState(null);
+
+//   const fileInputRef = useRef(null);
+//   const messagesEndRef = useRef(null);
+
+//   const scrollToBottom = () => {
+//     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+//   };
+
+//   useEffect(() => {
+//     scrollToBottom();
+//   }, [messages]);
+
+//   // ---------------- File Upload ----------------
+//   const handleFileUpload = async (file) => {
+//     if (!file || file.type !== 'application/pdf') return;
+
+//     setCurrentPDF(file);
+//     setIsIndexing(true);
+//     setMessages(prev => [...prev, { type: 'file', content: `📄 Uploaded: ${file.name}` }]);
+
+//     try {
+//       const data = await uploadPDF(file); // call your api.js uploadPDF
+//       setSessionId(data.sessionId);
+//       setHasUploadedFile(true);
+
+//       setMessages(prev => [...prev, {
+//         type: 'system',
+//         content: `PDF "${file.name}" uploaded and indexed successfully! You can now ask questions.`
+//       }]);
+//     } catch (err) {
+//       setMessages(prev => [...prev, { type: 'error', content: `Upload failed: ${err.message}` }]);
+//     } finally {
+//       setIsIndexing(false);
+//     }
+//   };
+
+//   const handleFileSelect = (e) => {
+//     const file = e.target.files[0];
+//     handleFileUpload(file);
+//   };
+
+//   const handleFileDrop = (e) => {
+//     e.preventDefault();
+//     const file = e.dataTransfer.files[0];
+//     handleFileUpload(file);
+//   };
+
+//   const handleDragOver = (e) => e.preventDefault();
+
+//   // ---------------- Send Message ----------------
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (!inputMessage.trim() || isLoading) return;
+
+//     if (!hasUploadedFile && !isIndexing) {
+//       setMessages(prev => [...prev, { type: 'warning', content: 'Please upload a PDF first.' }]);
+//       return;
+//     }
+
+//     const userMessage = {
+//       type: 'user',
+//       content: inputMessage.trim(),
+//       timestamp: new Date().toISOString()
+//     };
+//     setMessages(prev => [...prev, userMessage]);
+//     setInputMessage('');
+//     setIsLoading(true);
+
+//     try {
+//       const data = await askQuestion(sessionId, userMessage.content);
+//       setMessages(prev => [...prev, { type: 'bot', content: data.answer }]);
+//     } catch (err) {
+//       setMessages(prev => [...prev, { type: 'error', content: `Failed: ${err.message}` }]);
+//     }
+
+//     setIsLoading(false);
+//   };
+
+//   const renderMessage = (message, index) => {
+//     const baseClasses = "p-3 rounded-xl text-sm max-w-[80%] text-white";
+//     switch (message.type) {
+//       case 'user': return <div key={index} className="flex justify-end"><div className={`${baseClasses} bg-blue-500/20 border border-blue-400/30 ml-12`}>{message.content}</div></div>;
+//       case 'bot': return <div key={index} className="flex justify-start"><div className={`${baseClasses} bg-white/10 border border-white/20 mr-12`}>{message.content}</div></div>;
+//       case 'file': return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-green-500/20 border border-green-400/30 text-center`}>{message.content}</div></div>;
+//       case 'system': return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-purple-500/20 border border-purple-400/30 text-center`}>{message.content}</div></div>;
+//       case 'warning': return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-yellow-500/20 border border-yellow-400/30 text-center text-yellow-300`}>⚠️ {message.content}</div></div>;
+//       case 'error': return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-red-500/20 border border-red-400/30 text-center text-red-300`}>❌ {message.content}</div></div>;
+//       default: return null;
+//     }
+//   };
+
+//   return (
+//     <div className="max-w-4xl mx-auto h-screen flex flex-col pt-16">
+//       {/* Messages */}
+//       <div className="flex-1 overflow-y-auto px-6 pb-4" onDrop={handleFileDrop} onDragOver={handleDragOver}>
+//         {messages.map(renderMessage)}
+//         {isIndexing && <div className="text-center text-purple-300">Processing PDF...</div>}
+//         {isLoading && <div className="text-center text-gray-300">AI is thinking...</div>}
+//         <div ref={messagesEndRef} />
+//       </div>
+
+//       {/* Input */}
+//       <div className="sticky bottom-0 bg-gray-900/80 p-4">
+//         <form onSubmit={handleSubmit} className="flex space-x-2">
+//           <input
+//             type="text"
+//             value={inputMessage}
+//             onChange={e => setInputMessage(e.target.value)}
+//             placeholder={!hasUploadedFile ? 'Upload PDF first...' : 'Ask a question...'}
+//             disabled={!backendStatus || isLoading || isIndexing}
+//             className="flex-1 p-2 rounded-lg bg-gray-800 text-white"
+//           />
+//           <button type="submit" disabled={isLoading || isIndexing} className="px-4 py-2 rounded-lg bg-blue-500 text-white">Send</button>
+//           <button type="button" onClick={() => fileInputRef.current?.click()} className="px-4 py-2 rounded-lg bg-green-500 text-white">Upload PDF</button>
+//           <input type="file" ref={fileInputRef} accept=".pdf" onChange={handleFileSelect} className="hidden" />
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default GeminiChat;
+
+
 import React, { useState, useRef, useEffect } from 'react';
 import { uploadPDF, askQuestion } from '../api';
 
@@ -368,19 +503,29 @@ const GeminiChat = ({ backendStatus }) => {
 
     setCurrentPDF(file);
     setIsIndexing(true);
-    setMessages(prev => [...prev, { type: 'file', content: `📄 Uploaded: ${file.name}` }]);
+
+    setMessages(prev => [...prev, {
+      type: 'file',
+      content: `📄 Uploaded: ${file.name}`,
+      timestamp: new Date().toISOString()
+    }]);
 
     try {
-      const data = await uploadPDF(file); // call your api.js uploadPDF
+      const data = await uploadPDF(file);
       setSessionId(data.sessionId);
       setHasUploadedFile(true);
 
       setMessages(prev => [...prev, {
         type: 'system',
-        content: `PDF "${file.name}" uploaded and indexed successfully! You can now ask questions.`
+        content: `PDF "${file.name}" uploaded and indexed successfully! You can now ask questions.`,
+        timestamp: new Date().toISOString()
       }]);
     } catch (err) {
-      setMessages(prev => [...prev, { type: 'error', content: `Upload failed: ${err.message}` }]);
+      setMessages(prev => [...prev, {
+        type: 'error',
+        content: `Upload failed: ${err.message}`,
+        timestamp: new Date().toISOString()
+      }]);
     } finally {
       setIsIndexing(false);
     }
@@ -409,6 +554,11 @@ const GeminiChat = ({ backendStatus }) => {
       return;
     }
 
+    if (isIndexing) {
+      setMessages(prev => [...prev, { type: 'warning', content: 'Please wait while your PDF is being processed...' }]);
+      return;
+    }
+
     const userMessage = {
       type: 'user',
       content: inputMessage.trim(),
@@ -420,9 +570,9 @@ const GeminiChat = ({ backendStatus }) => {
 
     try {
       const data = await askQuestion(sessionId, userMessage.content);
-      setMessages(prev => [...prev, { type: 'bot', content: data.answer }]);
+      setMessages(prev => [...prev, { type: 'bot', content: data.answer, timestamp: new Date().toISOString() }]);
     } catch (err) {
-      setMessages(prev => [...prev, { type: 'error', content: `Failed: ${err.message}` }]);
+      setMessages(prev => [...prev, { type: 'error', content: `Failed: ${err.message}`, timestamp: new Date().toISOString() }]);
     }
 
     setIsLoading(false);
@@ -431,39 +581,74 @@ const GeminiChat = ({ backendStatus }) => {
   const renderMessage = (message, index) => {
     const baseClasses = "p-3 rounded-xl text-sm max-w-[80%] text-white";
     switch (message.type) {
-      case 'user': return <div key={index} className="flex justify-end"><div className={`${baseClasses} bg-blue-500/20 border border-blue-400/30 ml-12`}>{message.content}</div></div>;
-      case 'bot': return <div key={index} className="flex justify-start"><div className={`${baseClasses} bg-white/10 border border-white/20 mr-12`}>{message.content}</div></div>;
-      case 'file': return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-green-500/20 border border-green-400/30 text-center`}>{message.content}</div></div>;
-      case 'system': return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-purple-500/20 border border-purple-400/30 text-center`}>{message.content}</div></div>;
-      case 'warning': return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-yellow-500/20 border border-yellow-400/30 text-center text-yellow-300`}>⚠️ {message.content}</div></div>;
-      case 'error': return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-red-500/20 border border-red-400/30 text-center text-red-300`}>❌ {message.content}</div></div>;
+      case 'user':
+        return <div key={index} className="flex justify-end"><div className={`${baseClasses} bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 ml-12`}>{message.content}</div></div>;
+      case 'bot':
+        return <div key={index} className="flex justify-start"><div className={`${baseClasses} bg-white/10 backdrop-blur-sm border border-white/20 mr-12`}>{message.content}</div></div>;
+      case 'file':
+        return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-green-500/20 backdrop-blur-sm border border-green-400/30 text-center`}>{message.content}</div></div>;
+      case 'system':
+        return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-purple-500/20 backdrop-blur-sm border border-purple-400/30 text-center`}>{message.content}</div></div>;
+      case 'warning':
+        return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-yellow-500/20 backdrop-blur-sm border border-yellow-400/30 text-center text-yellow-300`}>⚠️ {message.content}</div></div>;
+      case 'error':
+        return <div key={index} className="flex justify-center"><div className={`${baseClasses} bg-red-500/20 backdrop-blur-sm border border-red-400/30 text-center text-red-300`}>❌ {message.content}</div></div>;
       default: return null;
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto h-screen flex flex-col pt-16">
-      {/* Messages */}
+      {/* Floating Background Lines */}
+      <div className="floating-lines">
+        <div className="floating-line"></div>
+        <div className="floating-line"></div>
+        <div className="floating-line"></div>
+        <div className="floating-line"></div>
+        <div className="floating-line"></div>
+        <div className="floating-line"></div>
+      </div>
+
+      {/* Header */}
+      <div className="text-center mb-8 px-6">
+        <h1 className="text-4xl font-semibold text-white mb-2 drop-shadow-lg">
+          Chat with your PDF
+        </h1>
+        <p className="text-gray-400 text-sm">
+          Upload a PDF and start asking questions about its content
+        </p>
+      </div>
+
+      {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-6 pb-4" onDrop={handleFileDrop} onDragOver={handleDragOver}>
         {messages.map(renderMessage)}
-        {isIndexing && <div className="text-center text-purple-300">Processing PDF...</div>}
-        {isLoading && <div className="text-center text-gray-300">AI is thinking...</div>}
+        {isIndexing && <div className="flex justify-center text-purple-300">Processing PDF...</div>}
+        {isLoading && <div className="flex justify-start text-gray-300">AI is thinking...</div>}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="sticky bottom-0 bg-gray-900/80 p-4">
-        <form onSubmit={handleSubmit} className="flex space-x-2">
-          <input
-            type="text"
+      {/* Input Area */}
+      <div className="sticky bottom-0 bg-gray-900/80 backdrop-blur-sm border-t border-white/10 p-4">
+        <form onSubmit={handleSubmit} className="flex items-center space-x-3">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 opacity-70 hover:opacity-100"
+            disabled={!backendStatus}
+            title="Upload PDF"
+          >
+            📎
+          </button>
+          <input type="text"
             value={inputMessage}
             onChange={e => setInputMessage(e.target.value)}
-            placeholder={!hasUploadedFile ? 'Upload PDF first...' : 'Ask a question...'}
+            placeholder={!hasUploadedFile ? 'Click 📎 to upload PDF or drag & drop...' : 'Ask a question...'}
             disabled={!backendStatus || isLoading || isIndexing}
-            className="flex-1 p-2 rounded-lg bg-gray-800 text-white"
+            className="flex-1 bg-transparent text-white placeholder-white/50 border-none outline-none text-sm"
           />
-          <button type="submit" disabled={isLoading || isIndexing} className="px-4 py-2 rounded-lg bg-blue-500 text-white">Send</button>
-          <button type="button" onClick={() => fileInputRef.current?.click()} className="px-4 py-2 rounded-lg bg-green-500 text-white">Upload PDF</button>
+          <button type="submit" disabled={!inputMessage.trim() || isLoading || isIndexing || !backendStatus} className="p-2 rounded-lg bg-white text-black hover:bg-gray-200 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Send
+          </button>
           <input type="file" ref={fileInputRef} accept=".pdf" onChange={handleFileSelect} className="hidden" />
         </form>
       </div>
@@ -472,6 +657,4 @@ const GeminiChat = ({ backendStatus }) => {
 };
 
 export default GeminiChat;
-
-
 
