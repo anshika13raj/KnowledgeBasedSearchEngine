@@ -153,11 +153,6 @@ CHUNK_OVERLAP=400
 6. **🔍 Retrieve**: Relevant chunks are found using similarity search
 7. **🤖 Generate**: Google Gemini generates an answer using retrieved context
 
-## PDF Upload & Storage
-1.Users can upload PDF files to the app.
-2.PDFs are now stored on Cloudinary, enabling secure, scalable, and reliable file storage.
-3.The backend indexes uploaded PDFs for retrieval-augmented generation (RAG) queries.
-
 ## 🔍 API Endpoints
 
 | Method | Endpoint | Description |
