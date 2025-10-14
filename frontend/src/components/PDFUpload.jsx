@@ -115,7 +115,8 @@
 
 import React, { useState } from 'react';
 import PDFUpload from './components/PDFUpload';
-import { uploadPDF } from './api';
+import APIService from '../services/APIService';
+
 
 const App = () => {
   const [sessionId, setSessionId] = useState('');
