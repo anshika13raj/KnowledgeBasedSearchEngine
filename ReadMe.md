@@ -26,8 +26,8 @@ A modern full-stack Retrieval-Augmented Generation (RAG) chat application built 
 ### 1-Minute Setup
 ```bash
 # Clone the repository
-git clone https://github.com/shivammourya10/RAG-using-.js.git
-cd Simple_RAG_in_js
+git clone https://github.com/anshika13raj/KnowledgeBasedSearchEngine.git
+cd PdfQuery_chat
 
 # Quick setup script
 ./setup.sh
