@@ -153,6 +153,11 @@ CHUNK_OVERLAP=400
 6. **🔍 Retrieve**: Relevant chunks are found using similarity search
 7. **🤖 Generate**: Google Gemini generates an answer using retrieved context
 
+## PDF Upload & Storage
+1.Users can upload PDF files to the app.
+2.PDFs are now stored on Cloudinary, enabling secure, scalable, and reliable file storage.
+3.The backend indexes uploaded PDFs for retrieval-augmented generation (RAG) queries.
+
 ## 🔍 API Endpoints
 
 | Method | Endpoint | Description |
@@ -170,10 +175,6 @@ CHUNK_OVERLAP=400
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the ISC License.
-
 ## 🙏 Acknowledgments
 
 - [Google AI](https://ai.google.dev/) for Gemini API
@@ -190,7 +191,5 @@ This project is licensed under the ISC License.
 - 💡 Submit feature requests via issues
 
 ---
-
-**Built with ❤️ by [Shivam Mourya](https://github.com/shivammourya10)**
 
 ⭐ Star this repo if you found it helpful!
