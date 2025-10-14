@@ -22,10 +22,21 @@
     "deploy:railway": "cd backend && railway up",
     "deploy:render": "echo 'Connect your GitHub repo to Render dashboard for deployment'"
   },
-  "keywords": ["rag", "pdf", "chat", "ai", "react", "nodejs"],
+  "keywords": [
+    "rag",
+    "pdf",
+    "chat",
+    "ai",
+    "react",
+    "nodejs"
+  ],
   "author": "Shivam Mourya",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "cloudinary": "^1.41.3",
+    "multer-storage-cloudinary": "^4.0.0"
   }
 }

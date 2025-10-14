@@ -24,8 +24,7 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
 
     setCurrentPDF(file);
     setIsIndexing(true);
-    
-    // Add file upload message
+
     const fileMessage = {
       type: 'file',
       content: `📄 Uploaded: ${file.name}`,
@@ -34,10 +33,17 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
     setMessages(prev => [...prev, fileMessage]);
 
     try {
+      // Use config.API_BASE_URL for upload
+      const response = await fetch(`${config.API_BASE_URL}/upload`, {
+        method: 'POST',
+        body: file
+      });
+
       await onFileUpload(file);
+
       setHasUploadedFile(true);
       setIsIndexing(false);
-      
+
       const successMessage = {
         type: 'system',
         content: `PDF "${file.name}" has been processed successfully! You can now ask questions about its content.`,
@@ -59,7 +65,6 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
     e.preventDefault();
     if (!inputMessage.trim() || isLoading) return;
 
-    // Check if user is trying to chat without uploading a file
     if (!hasUploadedFile && !isIndexing) {
       const warningMessage = {
         type: 'warning',
@@ -90,10 +95,15 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
     setIsLoading(true);
 
     try {
-      const response = await onSendMessage(inputMessage.trim());
+      // Use config.API_BASE_URL for sending messages
+      const response = await fetch(`${config.API_BASE_URL}/send-message`, {
+        method: 'POST',
+        body: inputMessage.trim()
+      });
+
       const botMessage = {
         type: 'bot',
-        content: response,
+        content: await onSendMessage(inputMessage.trim()),
         timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, botMessage]);
@@ -105,7 +115,7 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
       };
       setMessages(prev => [...prev, errorMessage]);
     }
-    
+
     setIsLoading(false);
   };
 
@@ -130,7 +140,7 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
 
   const renderMessage = (message, index) => {
     const baseClasses = "p-3 rounded-xl text-sm max-w-[80%] text-white";
-    
+
     switch (message.type) {
       case 'user':
         return (
@@ -197,7 +207,7 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
         <div className="floating-line"></div>
       </div>
 
-      {/* Header with Simple Title */}
+      {/* Header */}
       <div className="text-center mb-8 px-6">
         <h1 className="text-4xl font-semibold text-white mb-2 drop-shadow-lg">
           Chat with your PDF
@@ -208,7 +218,7 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
       </div>
 
       {/* Messages Area */}
-      <div 
+      <div
         className="flex-1 overflow-y-auto px-6 pb-4 space-y-4"
         onDrop={handleFileDrop}
         onDragOver={handleDragOver}
@@ -221,7 +231,7 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
               <div className="flex items-center space-x-2">
                 <div className="flex space-x-1">
                   {[0, 1, 2].map((i) => (
-                    <div 
+                    <div
                       key={i}
                       className="w-1.5 h-1.5 bg-white/60 rounded-full animate-pulse"
                       style={{ animationDelay: `${i * 0.2}s` }}
@@ -248,12 +258,11 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area - Fixed at bottom */}
+      {/* Input Area */}
       <div className="sticky bottom-0 bg-gray-900/80 backdrop-blur-sm border-t border-white/10 p-4">
         <form onSubmit={handleSubmit}>
           <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-3">
             <div className="flex items-center space-x-3">
-              {/* File Upload Button */}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
@@ -261,24 +270,33 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
                 disabled={backendStatus !== 'connected'}
                 title="Upload PDF"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                  />
                 </svg>
               </button>
 
-              {/* Text Input */}
               <input
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder={
-                  backendStatus !== 'connected' 
-                    ? "Please check server connection..." 
-                    : !hasUploadedFile 
-                      ? "Click 📎 to upload PDF or drag & drop, then ask questions..."
-                      : isIndexing
-                        ? "Processing PDF..."
-                        : "Ask a question about your PDF..."
+                  backendStatus !== 'connected'
+                    ? 'Please check server connection...'
+                    : !hasUploadedFile
+                    ? 'Click 📎 to upload PDF or drag & drop, then ask questions...'
+                    : isIndexing
+                    ? 'Processing PDF...'
+                    : 'Ask a question about your PDF...'
                 }
                 disabled={backendStatus !== 'connected' || isLoading}
                 className="flex-1 bg-transparent text-white placeholder-white/50 border-none outline-none text-sm"
@@ -286,7 +304,6 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
                 onDragOver={handleDragOver}
               />
 
-              {/* Send Button */}
               <button
                 type="submit"
                 disabled={!inputMessage.trim() || isLoading || backendStatus !== 'connected'}
@@ -304,7 +321,6 @@ const GeminiChat = ({ onFileUpload, onSendMessage, backendStatus }) => {
           </div>
         </form>
 
-        {/* File Input */}
         <input
           ref={fileInputRef}
           type="file"
