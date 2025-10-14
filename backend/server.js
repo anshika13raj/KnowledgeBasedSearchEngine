@@ -13,7 +13,11 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Configure multer for file uploads
+//const upload = multer({ storage: multer.memoryStorage() });
+
 const upload = multer({ storage: multer.memoryStorage() });
+app.post('/api/upload', upload.single('pdf'), async (req, res) => { ... });
+
 
 // Store sessions in memory
 const sessions = new Map();
