@@ -7,6 +7,22 @@ A modern full-stack Retrieval-Augmented Generation (RAG) chat application built 
 ![Node.js](https://img.shields.io/badge/Node.js-Express-green)
 ![AI](https://img.shields.io/badge/AI-Google%20Gemini-orange)
 
+## 🎬 Demo Video Overview
+
+-📄 PDF Upload & Processing: Watch how KnowledgeBasedSearchEngine accepts a PDF from your device, extracts text, and prepares it for intelligent querying.
+-💬 Query Execution: Demonstrates asking multiple questions to the PDF, including:
+  "What is House Rent Allowance?"
+  "What is Travel Allowance and Concession?"
+  "Summarizing the entire PDF"
+  "Shortening the summary for quick insights"
+-🧠 RAG Technology in Action: See how retrieval-augmented generation processes your queries, retrieves relevant sections, and produces contextually accurate answers.
+-🎥 Step-by-Step Insight: The video explains the internal workflow of RackChat, including text extraction, embedding creation, and AI-based reasoning.
+-🔒 Session-Based Workflow: Each PDF upload creates an isolated session, ensuring data separation and privacy.
+
+🚀 Quick Preview: The 1 minute 46 seconds demo highlights the seamless integration of AI and user interaction.
+
+Demo Video: https://drive.google.com/file/d/1hR-2gZW47sGl0rd6wvFrO9xQLmPcKAZO/view?usp=drive_link
+
 ## ✨ Features
 
 - 📄 **PDF Upload & Processing**: Extract and chunk text from PDF documents
