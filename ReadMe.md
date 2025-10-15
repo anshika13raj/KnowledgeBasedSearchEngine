@@ -12,23 +12,23 @@ A modern full-stack Retrieval-Augmented Generation (RAG) chat application built 
 
 2.💬 Query Execution: Demonstrates asking multiple questions to the PDF, including:
 
-"What is House Rent Allowance?"
+  "What is House Rent Allowance?"
 
-"What is Travel Allowance and Concession?"
+  "What is Travel Allowance and Concession?"
 
-Summarizing the entire PDF
+  "Summarizing the entire PDF"
 
-Shortening the summary for quick insights
+  "Shortening the summary for quick insights"
 
 3.🧠 RAG Technology in Action: See how retrieval-augmented generation processes your queries, retrieves relevant sections, and produces contextually accurate answers.
 
 4.🎥 Step-by-Step Insight: The video explains the internal workflow of RackChat, including text extraction, embedding creation, and AI-based reasoning.
 
-7.🔒 Session-Based Workflow: Each PDF upload creates an isolated session, ensuring data separation and privacy.
+5.🔒 Session-Based Workflow: Each PDF upload creates an isolated session, ensuring data separation and privacy.
 
-8.🚀 Quick Preview: The 1 minute 46 seconds demo highlights the seamless integration of AI and user interaction.
+6.🚀 Quick Preview: The 1 minute 46 seconds demo highlights the seamless integration of AI and user interaction.
 
-Demo Video: https://drive.google.com/file/d/1hR-2gZW47sGl0rd6wvFrO9xQLmPcKAZO/view?usp=drive_link
+**Demo Video:** https://drive.google.com/file/d/1hR-2gZW47sGl0rd6wvFrO9xQLmPcKAZO/view?usp=drive_link
 
 ## ✨ Features
 
